@@ -3,6 +3,12 @@ AI Agent is a guided Boot.dev project.
 If you've ever used [Cursor](https://www.cursor.com/en) or [Claude Code](https://docs.anthropic.com/en/docs/agents-and-tools/claude-code/overview) as an "[agentic](https://en.wikipedia.org/wiki/Agentic_AI)" AI editor, you'll understand what we're building in this project.
 
 We're building a toy version of Claude Code using Google's [free Gemini API](https://ai.google.dev/gemini-api/docs)!
+## Tools
+* [Google AI Studio](https://aistudio.google.com/)
+
+## Packages used
+* [google-genai](https://pypi.org/project/google-genai/)
+* [python-dotenv](https://pypi.org/project/python-dotenv/)
 
 # How to use
 * Install python
