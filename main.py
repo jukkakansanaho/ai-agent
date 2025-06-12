@@ -1,5 +1,6 @@
 import os
 import sys
+#import argparse
 from dotenv import load_dotenv
 from google import genai
 
@@ -10,7 +11,19 @@ if len(sys.argv) < 2:
 else:
     contents = sys.argv[1]
     print(f"Prompt: {contents}")
-
+'''
+# Alternative way to handle arguments with argparse
+#
+parser = argparse.ArgumentParser(description="Generate content using Google Gemini AI")
+parser.add_argument(
+    "prompt",
+    type=str,
+    #required=True,
+    help="The prompt to send to the model (a string)."
+)
+args = parser.parse_args()
+contents = args.prompt
+'''
 def main():
     load_dotenv()
     api_key = os.environ.get("GEMINI_API_KEY")
