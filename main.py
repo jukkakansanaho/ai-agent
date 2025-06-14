@@ -1,6 +1,5 @@
 import os
 import sys
-import argparse
 from dotenv import load_dotenv
 from google import genai
 from google.genai import types
@@ -10,36 +9,22 @@ def main():
     load_dotenv()
 
     # Handle arguments
-    args = sys.argv[1:]
+    verbose = "--verbose" in sys.argv or "-v" in sys.argv
+    args = [arg for arg in sys.argv[1:] if not arg.startswith(("-", "--", "v"))]
+
     if not args:
         print(f"AI Code Assistant")
-        print(f"\nUsage: python main.py <prompt>")
-        print(f"\nExample: python main.py 'What is the capital of France?'")
+        print(f'\nUsage: python main.py "your prompt here" [--verbose]')
+        print(f'\nExample: python main.py "How do I build a calculator app?"')
         sys.exit(1)
-    print(f"Args: {args}")
-    user_prompt = " ".join(args[0])
-
-    '''
-    # Handle arguments - alternative
-    parser = argparse.ArgumentParser(
-        description='AI Code Assistant',
-        usage='%(prog)s [options] <prompt>',
-        )
-    parser.add_argument(
-        'prompt',
-        type=str,
-        help='The prompt to send to the model (a string).'
-    )
-    parser.add_argument(
-        '-v', '--verbose',
-        type=str
-    )
-    args = parser.parse_args()
-    user_prompt = args.prompt
-    ''' 
+    user_prompt = " ".join(args)
+ 
     # Prepare the client
     api_key = os.environ.get("GEMINI_API_KEY")
     client = genai.Client(api_key=api_key)
+
+    if verbose:
+        print(f"User prompt: {user_prompt}\n")
 
     # Prepare the messages
     messages = [
@@ -47,24 +32,25 @@ def main():
     ]
 
     # Generate the response
-    generate_content(client, messages, args)
+    generate_content(client, messages, verbose)
 
-def generate_content(client, messages, args):
-    user_prompt = args[0] #"".join(messages[0].parts[0].text)
-    optional_args = args[1:]
+def generate_content(client, messages, verbose):
     model = "gemini-2.0-flash-001"
     #model = "gemini-2.0-flash-lite"
-    response = client.models.generate_content(model=model, contents=messages)
-    # Print the response
-    print("Response:")
-    print(response.text)
-
-    # Print the user prompt, prompt tokens, response tokens, and total token count
-    if "--verbose" in optional_args or "-v" in optional_args:
-        print(f"User prompt: {user_prompt}")
+    response = client.models.generate_content(
+        model=model, 
+        contents=messages
+    )
+    
+    # If verbose, print the prompt tokens, response tokens, and total token count
+    if verbose:
         print(f"Prompt tokens: {response.usage_metadata.prompt_token_count}")
         print(f"Response tokens: {response.usage_metadata.candidates_token_count}")
         print(f"Total token count: {response.usage_metadata.total_token_count}")
+
+    # Print the response
+    print("Response:")
+    print(response.text)
 
 if __name__ == "__main__":
     main()
