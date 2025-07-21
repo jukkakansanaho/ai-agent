@@ -12,11 +12,15 @@ We're building a toy version of Claude Code using Google's [free Gemini API](htt
 
 # How to use
 * Install python
-* run ```./main.sh```
+* run ```uv run ./main.py```
 
-## Install and use Python venv
-* ```python3 -m venv .venv```
-* ```source .venv/bin/activate```
+## Install and use Python uv
+* install uv: ```curl -LsSf https://astral.sh/uv/install.sh | sh```
+* initialize uv in the project: ```uv init```
+    * creates .venv dir
+* initialize venv: ```source .venv/bin/activate```
+* add dependencies: ```uv add -r requirements.txt```
+    * installs deps and creates ```uv.lock```
 
 ## Test Python code
 * ```./test.sh```
